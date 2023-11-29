@@ -144,12 +144,16 @@ void loop()
     strip_1.show();
     delay(10000); // Keep the LED on for 10 second
     strip_1.setPixelColor(touchedCol, strip.Color(0, 0, 0)); // No color
-  } else if (touchedRow == 2){
+  } 
+  // Light up corresponding LED in strip 2
+  else if (touchedRow == 2){
     strip_2.setPixelColor(touchedCol, strip.Color(255, 255, 255)); // White color
     strip_2.show();
     delay(10000); // Keep the LED on for 10 second
     strip_2.setPixelColor(touchedCol, strip.Color(0, 0, 0)); // No color
-  } else if (touchedRow == 3){
+  } 
+  // Light up corresponding LED in strip 3
+  else if (touchedRow == 3){
     strip_3.setPixelColor(touchedCol, strip.Color(255, 255, 255)); // White color
     strip_3.show();
     delay(10000); // Keep the LED on for 10 second
