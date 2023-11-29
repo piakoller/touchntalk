@@ -11,6 +11,14 @@
 *******************************************************************************/
 #include <CapacitiveSensor.h>
 
+#define NEOPIXEL_PIN {?, ?, ?}  // ?? Pins connected to the NeoPixel strip
+#define NUM_PIXELS 5   // Total number of NeoPixels (5x3 matrix)
+
+Adafruit_NeoPixel strip_1 = Adafruit_NeoPixel(NUM_PIXELS, NEOPIXEL_PIN[1], NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip_2 = Adafruit_NeoPixel(NUM_PIXELS, NEOPIXEL_PIN[2], NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip_3 = Adafruit_NeoPixel(NUM_PIXELS, NEOPIXEL_PIN[3], NEO_GRB + NEO_KHZ800);
+
+
 double row1, row2, row3, col1, col2, col3, col4, col5;
 
 int touchedRow, touchedCol, oldRow, oldCol;
@@ -51,7 +59,19 @@ CapacitiveSensor sensor8 = CapacitiveSensor(sender, col_pin_5);
 
 void setup()
 {
-   Serial.begin(9600);
+  Serial.begin(9600);
+
+  // Strip 1
+  strip_1.begin();
+  strip_1.show();  // Initialize all pixels to 'off'
+
+  // Strip 2
+  strip_2.begin();
+  strip_2.show();  // Initialize all pixels to 'off'
+
+  // Strip 3
+  strip_3.begin();
+  strip_3.show();  // Initialize all pixels to 'off'
 }
 
 void loop()
@@ -116,6 +136,24 @@ void loop()
     Serial.println(";");
     newRow = false;
     newCol = false;
+  }
+
+  // Light up corresponding LED in strip 1
+  if(touchedRow == 1){
+    strip_1.setPixelColor(touchedCol, strip.Color(255, 255, 255)); // White color
+    strip_1.show();
+    delay(10000); // Keep the LED on for 10 second
+    strip_1.setPixelColor(touchedCol, strip.Color(0, 0, 0)); // No color
+  } else if (touchedRow == 2){
+    strip_2.setPixelColor(touchedCol, strip.Color(255, 255, 255)); // White color
+    strip_2.show();
+    delay(10000); // Keep the LED on for 10 second
+    strip_2.setPixelColor(touchedCol, strip.Color(0, 0, 0)); // No color
+  } else if (touchedRow == 3){
+    strip_3.setPixelColor(touchedCol, strip.Color(255, 255, 255)); // White color
+    strip_3.show();
+    delay(10000); // Keep the LED on for 10 second
+    strip_3.setPixelColor(touchedCol, strip.Color(0, 0, 0)); // No color
   }
 
   delay(2);
