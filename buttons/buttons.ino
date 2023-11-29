@@ -95,31 +95,31 @@ void loop()
   // Find the col that is touched, assign it to the variable
   if (col1 > 30){
     oldCol = touchedCol;
-    touchedCol = 1;
+    touchedCol = 0;
   } else if(col2 > 30){
     oldCol = touchedCol;
-    touchedCol = 2;
+    touchedCol = 1;
   } else if(col3 > 30){
     oldCol = touchedCol;
-    touchedCol = 3;
+    touchedCol = 2;
   } else if(col4 > 20){
     oldCol = touchedCol;
-    touchedCol = 4;
+    touchedCol = 3;
   } else if(col5 > 30){
     oldCol = touchedCol;
-    touchedCol = 5;
+    touchedCol = 4;
   }
 
   // Find the row that is touched, assign it to the variable
   if (row1 > 60){
     oldRow = touchedRow;
-    touchedRow = 1;
+    touchedRow = 0;
   } else if (row2 > 60){
     oldRow = touchedRow;
-    touchedRow = 2;
+    touchedRow = 1;
   } else if (row3 > 60){
     oldRow = touchedRow;
-    touchedRow = 3;
+    touchedRow = 2;
   }
 
   if (oldRow != touchedRow){
@@ -139,21 +139,21 @@ void loop()
   }
 
   // Light up corresponding LED in strip 1
-  if(touchedRow == 1){
+  if(touchedRow == 0){
     strip_1.setPixelColor(touchedCol, strip.Color(255, 255, 255)); // White color
     strip_1.show();
     delay(10000); // Keep the LED on for 10 second
     strip_1.setPixelColor(touchedCol, strip.Color(0, 0, 0)); // No color
   } 
   // Light up corresponding LED in strip 2
-  else if (touchedRow == 2){
+  else if (touchedRow == 1){
     strip_2.setPixelColor(touchedCol, strip.Color(255, 255, 255)); // White color
     strip_2.show();
     delay(10000); // Keep the LED on for 10 second
     strip_2.setPixelColor(touchedCol, strip.Color(0, 0, 0)); // No color
   } 
   // Light up corresponding LED in strip 3
-  else if (touchedRow == 3){
+  else if (touchedRow == 2){
     strip_3.setPixelColor(touchedCol, strip.Color(255, 255, 255)); // White color
     strip_3.show();
     delay(10000); // Keep the LED on for 10 second
