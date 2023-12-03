@@ -23,7 +23,6 @@ void setup() {
   Serial.begin(9600);
   SPI.begin(); // Init SPI bus
   rfid.PCD_Init(); // Init MFRC522
-  Serial.println("Tap an RFID/NFC tag on the RFID-RC522 reader");
 }
 
 void loop() {
