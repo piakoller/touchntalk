@@ -31,6 +31,8 @@ struct TagMapping {
   int tagNumber;  // Number associated with the tag
 };
 
+int paperNumber;
+
 // Define the mapping table with respective NFC tag UIDs and numbers
 TagMapping tagMappings[] = {
   {{0x04, 0xB1, 0x61, 0x3E, 0xB9, 0x2A, 0x81}, 1},
@@ -102,12 +104,12 @@ void loop()
   if (rfid.PICC_IsNewCardPresent()) { // New tag is available
     if (rfid.PICC_ReadCardSerial()) { // NUID has been read
       MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
-      Serial.print("RFID/NFC Tag Type: ");
-      Serial.println(rfid.PICC_GetTypeName(piccType)); // Print UID in Serial Monitor in the hex format
-      Serial.print("UID:");
+      //Serial.print("RFID/NFC Tag Type: ");
+      //Serial.println(rfid.PICC_GetTypeName(piccType)); // Print UID in Serial Monitor in the hex format
+      //Serial.print("UID:");
       for (int i = 0; i < rfid.uid.size; i++) {
-        Serial.print(rfid.uid.uidByte[i] < 0x10 ? " 0" : " ");
-        Serial.print(rfid.uid.uidByte[i], HEX);
+        //Serial.print(rfid.uid.uidByte[i] < 0x10 ? " 0" : " ");
+        //Serial.print(rfid.uid.uidByte[i], HEX);
       }
       Serial.println();
 
@@ -121,8 +123,9 @@ void loop()
           }
         }
         if (matched) {
-          Serial.print("Mapped Number: ");
-          Serial.println(tagMappings[j].tagNumber);
+          //Serial.print("Mapped Number: ");
+          //Serial.println(tagMappings[j].tagNumber);
+          paperNumber = tagMappings[j].tagNumber;
           break;
         }
       }
@@ -185,10 +188,14 @@ void loop()
 
   // Print the pair to serial monitor when the number change
   if (newRow || newCol){
+    Serial.print("[");
+    Serial.print(paperNumber);
+    Serial.println(";");
     Serial.print(touchedRow);
     Serial.print(",");
     Serial.print(touchedCol);
-    Serial.println(";");
+    Serial.print("]");
+    Serial.println();
     newRow = false;
     newCol = false;
   }
