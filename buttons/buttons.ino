@@ -96,6 +96,8 @@ void setup()
   FastLED.addLeds<NEOPIXEL,LED_PIN_2>(leds_2,NUM_LEDS);
   FastLED.addLeds<NEOPIXEL,LED_PIN_3>(leds_3,NUM_LEDS);
 
+  FastLED.setBrightness(200): //0-255
+
 }
 
 void loop()
@@ -142,10 +144,20 @@ void loop()
 
   // Send col values
   col1 = sensor4.capacitiveSensor(samples_touch);
+  Serial.print("col1: ");
+  Serial.print(col1);
   col2 = sensor5.capacitiveSensor(samples_touch);
+  Serial.print("; col2: ");
+  Serial.print(col2);
   col3 = sensor6.capacitiveSensor(samples_touch);
+  Serial.print("; col3: ");
+  Serial.print(col3);
   col4 = sensor7.capacitiveSensor(samples_touch);
+  Serial.print("; col4: ");
+  Serial.print(col4);
   col5 = sensor8.capacitiveSensor(samples_touch);
+  Serial.print("; col5: ");
+  Serial.println(col5);
 
   //find some way to read seperate, time multiplexing?? not working because of the overlap Isolation with air and foam tape
 
@@ -187,11 +199,12 @@ void loop()
     newCol = true;
   }
 
+
   // Print the pair to serial monitor when the number change
   if (newRow || newCol){
     Serial.print("[");
     Serial.print(paperNumber);
-    Serial.println(";");
+    Serial.print(";");
     Serial.print(touchedRow);
     Serial.print(",");
     Serial.print(touchedCol);
@@ -200,6 +213,7 @@ void loop()
     newRow = false;
     newCol = false;
   }
+
 
   for(int i = 0; i<NUM_LEDS; i++){
     leds_1[i] = CRGB::Red;
@@ -231,6 +245,7 @@ void loop()
   // Light up corresponding LED in strip 3
   else if (touchedRow == 2){
     leds_3[touchedCol] = CRGB::White; // Turn LED on
+
     FastLED.show();
 /*
     delay(10000); // Keep the LED on for 10 second
