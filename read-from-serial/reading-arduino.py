@@ -11,8 +11,8 @@ word_matrix_1 = [
 
 word_matrix_2 = [
     ['hope', 'excited', 'time', 'Too /also', 'the'],
-    ['exam', 'nervous', 'difficult', 'what', '(plural)'],
-    ['what', 'past', 'future', '(possessive)', '?']
+    ['exam', 'nervous', 'present', 'what', '(plural)'],
+    ['difficult', 'past', 'future', '(possessive)', '?']
 ]
 
 word_matrix_3 = [
