@@ -10,20 +10,27 @@
 *
 *******************************************************************************/
 #include <CapacitiveSensor.h>
-#include <SPI.h>
-#include <MFRC522.h>
+//#include <MFRC522.h>
+#include <FastLED.h>
 
+/*
 #define SS_PIN 5 // ESP32 pin GPIO5
-#define RST_PIN 0 // ESP32 pin GPIO27
+#define RST_PIN 27 // ESP32 pin GPIO27
+*/
 
-#define NEOPIXEL_PIN {?, ?, ?}  // ?? Pins connected to the NeoPixel strip
-#define NUM_PIXELS 5   // Total number of NeoPixels (5x3 matrix)
+#define LED_PIN_1 0  // LED Pins
+#define LED_PIN_2 22
+#define LED_PIN_3 32
+#define NUM_LEDS 5   // Total number of LEDs (5x3 matrix)
+CRGB leds_1[NUM_LEDS];
+CRGB leds_2[NUM_LEDS];
+CRGB leds_3[NUM_LEDS];
 
-Adafruit_NeoPixel strip_1 = Adafruit_NeoPixel(NUM_PIXELS, NEOPIXEL_PIN[1], NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel strip_2 = Adafruit_NeoPixel(NUM_PIXELS, NEOPIXEL_PIN[2], NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel strip_3 = Adafruit_NeoPixel(NUM_PIXELS, NEOPIXEL_PIN[3], NEO_GRB + NEO_KHZ800);
+//Adafruit_NeoPixel strip_1 = Adafruit_NeoPixel(NUM_PIXELS, NEOPIXEL_PIN[1], NEO_GRB + NEO_KHZ800);
+//Adafruit_NeoPixel strip_2 = Adafruit_NeoPixel(NUM_PIXELS, NEOPIXEL_PIN[2], NEO_GRB + NEO_KHZ800);
+//Adafruit_NeoPixel strip_3 = Adafruit_NeoPixel(NUM_PIXELS, NEOPIXEL_PIN[3], NEO_GRB + NEO_KHZ800);
 
-MFRC522 rfid(SS_PIN, RST_PIN);
+//MFRC522 rfid(SS_PIN, RST_PIN);
 
 // Define a mapping table for NFC tags
 struct TagMapping {
@@ -31,7 +38,7 @@ struct TagMapping {
   int tagNumber;  // Number associated with the tag
 };
 
-int paperNumber;
+int paperNumber = 0;
 
 // Define the mapping table with respective NFC tag UIDs and numbers
 TagMapping tagMappings[] = {
@@ -57,15 +64,15 @@ int row_pin_2 = 13;
 
 int row_pin_3 = 12;
 
-int col_pin_1 = 21;  
+int col_pin_1 = 15;  
 
-int col_pin_2 = 19;
+int col_pin_2 = 4;
 
-int col_pin_3 = 18;
+int col_pin_3 = 21;
 
-int col_pin_4 = 17;
+int col_pin_4 = 16;
 
-int col_pin_5 = 16;
+int col_pin_5 = 17;
 
 int samples_touch = 10;
 
@@ -83,24 +90,17 @@ void setup()
 {
   Serial.begin(9600);
   
-  SPI.begin(); // Init SPI bus
-  rfid.PCD_Init(); // Init MFRC522
+  //rfid.PCD_Init(); // Init MFRC522
 
-  // Strip 1
-  strip_1.begin();
-  strip_1.show();  // Initialize all pixels to 'off'
+  FastLED.addLeds<NEOPIXEL,LED_PIN_1>(leds_1,NUM_LEDS);
+  FastLED.addLeds<NEOPIXEL,LED_PIN_2>(leds_2,NUM_LEDS);
+  FastLED.addLeds<NEOPIXEL,LED_PIN_3>(leds_3,NUM_LEDS);
 
-  // Strip 2
-  strip_2.begin();
-  strip_2.show();  // Initialize all pixels to 'off'
-
-  // Strip 3
-  strip_3.begin();
-  strip_3.show();  // Initialize all pixels to 'off'
 }
 
 void loop()
 {
+  /*
   if (rfid.PICC_IsNewCardPresent()) { // New tag is available
     if (rfid.PICC_ReadCardSerial()) { // NUID has been read
       MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
@@ -134,6 +134,7 @@ void loop()
       rfid.PCD_StopCrypto1(); // Stop encryption on PCD
     }
   }
+  */
   // Send row values
   row1 = sensor1.capacitiveSensor(samples_touch);
   row2 = sensor2.capacitiveSensor(samples_touch);
@@ -200,26 +201,42 @@ void loop()
     newCol = false;
   }
 
+  for(int i = 0; i<NUM_LEDS; i++){
+    leds_1[i] = CRGB::Red;
+    leds_2[i] = CRGB::Red;
+    leds_3[i] = CRGB::Red;
+    FastLED.show();
+  }
+
   // Light up corresponding LED in strip 1
   if(touchedRow == 0){
-    strip_1.setPixelColor(touchedCol, strip.Color(255, 255, 255)); // White color
-    strip_1.show();
+    leds_1[touchedCol] = CRGB::White; // Turn LED on
+    FastLED.show();
+/*
     delay(10000); // Keep the LED on for 10 second
-    strip_1.setPixelColor(touchedCol, strip.Color(0, 0, 0)); // No color
+    leds_1[touchedCol] = CRGB::Black; // Turn LED off
+    FastLED.show();
+    */
   } 
   // Light up corresponding LED in strip 2
   else if (touchedRow == 1){
-    strip_2.setPixelColor(touchedCol, strip.Color(255, 255, 255)); // White color
-    strip_2.show();
+    leds_2[touchedCol] = CRGB::White; // Turn LED on
+    FastLED.show();
+/*
     delay(10000); // Keep the LED on for 10 second
-    strip_2.setPixelColor(touchedCol, strip.Color(0, 0, 0)); // No color
+    leds_2[touchedCol] = CRGB::Black; // Turn LED off
+    FastLED.show();
+    */
   } 
   // Light up corresponding LED in strip 3
   else if (touchedRow == 2){
-    strip_3.setPixelColor(touchedCol, strip.Color(255, 255, 255)); // White color
-    strip_3.show();
+    leds_3[touchedCol] = CRGB::White; // Turn LED on
+    FastLED.show();
+/*
     delay(10000); // Keep the LED on for 10 second
-    strip_3.setPixelColor(touchedCol, strip.Color(0, 0, 0)); // No color
+    leds_3[touchedCol] = CRGB::Black; // Turn LED off
+    FastLED.show();
+    */
   }
 
   delay(2);
