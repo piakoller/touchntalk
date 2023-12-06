@@ -128,7 +128,13 @@ void loop() {
   FastLED.show();
   delay(20);
 
-  //I want beer please
+  //Yes I want beer please
+  Serial.println("[1;2,1]"); //Yes
+  leds_3[1] = CRGB::White; // Turn LED on
+  FastLED.show();
+  delay(10);
+  leds_3[1] = CRGB::Red; // Turn LED off
+  FastLED.show();
   Serial.println("[1;2,4]"); //I
   leds_3[4] = CRGB::White; // Turn LED on
   FastLED.show();
