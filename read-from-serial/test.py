@@ -22,25 +22,32 @@ word_matrix_2 = [
 
 # Open serial port
 serial_port = 'COM4'
-baud_rate = 115200
+baud_rate = 9600
 
 serial_inst = serial.Serial(serial_port, baud_rate)
 serial_inst.flushInput()
 
 root = tk.Tk()
+# specify size of window.
+root.geometry("250x170")
 
-root.title("Selected Words")
-root.geometry("1000x680")
+# Create text widget and specify size.
+T = tk.Text(root, height=5, width=52)
 
-# Text widget to display selected words
-selected_words = tk.Text(root, height=1000, width=680, font=("Helvetica", 32))
-selected_words.pack()
+# Create label
+l = tk.Label(root, text="Selected Words")
+l.config(font=("Courier", 14))
+
+l.pack()
+T.pack()
+
+def update_selected_words(word):
+    T.insert(tk.END, word + "\n")
 
 while True:
     if serial_inst.in_waiting > 0:
         # Read line from serial
         input_from_arduino = serial_inst.readline().decode().strip()
-        print("Received from Arduino:", input_from_arduino)
 
         # Extract paper number, row, and column from input string
         input_values = input_from_arduino[1:-1].split(';')
@@ -64,10 +71,9 @@ while True:
         # Print the selected word
         print(f"The selected word is: {selected_word}")
 
-        # Update the selected_words Text widget with the selected_word
-        selected_words.insert(tk.END, selected_word + "\n")
-        # Scroll the Text widget to the last added position
-        selected_words.see(tk.END)
-        root.update()
+        # Insert the selected word in the Tkinter window
+        update_selected_words(selected_word)
 
-        # root.mainloop()
+    root.update_idletasks()  # Update Tkinter window
+
+    root.mainloop()  # Start the Tkinter main loop
